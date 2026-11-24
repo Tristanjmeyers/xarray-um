@@ -1,0 +1,13 @@
+xarray-um
+
+The Rust UM header parsing and WGDOS decoding derive from the NIWA
+um2netcdf implementation by Mark Cheeseman (2014), distributed under
+GPL-3.0-or-later: https://github.com/adeytown/um2netcdf
+
+The included NZRA STASH-to-CF XML retains its original author and modification
+comments, including contributions from NIWA staff. This package's name does
+not imply endorsement by the original authors or the UK Met Office.
+
+The backend has been developed against NZRA sample files. Supported scientific
+operations and limitations are described in README.md; compatibility with all
+Unified Model files is not asserted.

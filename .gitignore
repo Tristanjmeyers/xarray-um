@@ -1,0 +1,19 @@
+# pixi environments
+.pixi/*
+!.pixi/config.toml
+
+# Rust/Python build outputs
+/target/
+/dist/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.so
+
+.ipynb_checkpoints/
+*.writing
+# Local milestone/benchmark runners contain site-specific paths.
+/scripts/*
+!/scripts/check_artifacts.py
+!/scripts/check_wheel.py
+/notebooks/

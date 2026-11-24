@@ -1,0 +1,7 @@
+#!/usr/bin/env python
+"""Drop-in converter; install xarray_um in the workflow Pixi environment first."""
+try:
+    from xarray_um.cli import main
+except ImportError as error:
+    raise SystemExit('Install the xarray_um package into this workflow Pixi environment before using this converter: '+str(error))
+if __name__=='__main__':main()

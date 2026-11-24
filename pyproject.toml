@@ -1,0 +1,22 @@
+[build-system]
+requires = ["maturin>=1.8,<2"]
+build-backend = "maturin"
+[project]
+name = "xarray-um"
+version = "0.1.0"
+description = "Lazy Rust-backed xarray reader for NZRA Unified Model fields files"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+license = "GPL-3.0-or-later"
+dependencies = ["numpy>=2", "xarray>=2026.9", "dask[array]", "netCDF4", "pyproj"]
+[project.entry-points."xarray.backends"]
+um = "xarray_um.backend:UMBackend"
+[project.scripts]
+xarray-um = "xarray_um.cli:main"
+[tool.maturin]
+python-source = "python"
+module-name = "xarray_um._native"
+
+include = [{ path = "python/xarray_um/data/*.xml", format = ["sdist", "wheel"] }, { path = "LICENSE", format = ["sdist", "wheel"] }, { path = "NOTICE", format = ["sdist", "wheel"] }]
+[project.urls]
+Repository = "https://github.com/Tristanjmeyers/xarray-um"
