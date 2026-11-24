@@ -128,6 +128,9 @@ invented scientific definitions.
 
 ## Development and releases
 
+For architecture, scientific invariants and portable HPC guidance, see
+[AGENTS.md](AGENTS.md).
+
 ```bash
 git clone https://github.com/Tristanjmeyers/xarray-um.git
 cd xarray-um
