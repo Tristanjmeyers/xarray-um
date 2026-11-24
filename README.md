@@ -23,7 +23,7 @@ Install its versioned URL into an existing Pixi environment. For example, for
 CPython 3.13 and the portable v0.1.0 release wheel:
 
 ```bash
-pixi add --pypi 'xarray-um @ https://github.com/Tristanjmeyers/xarray-um/releases/download/v0.1.0/xarray_um-0.1.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl'
+pixi add --pypi 'xarray-um @ https://github.com/Tristanjmeyers/xarray-um/releases/download/v0.1.0/xarray_um-0.1.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl'
 pixi run python -c 'import xarray as xr; print(xr.backends.list_engines())'
 ```
 
