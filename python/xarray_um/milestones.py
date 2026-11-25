@@ -150,7 +150,7 @@ class Demonstration:
             np.testing.assert_array_equal(selected,expected)
             return dict(b.sizes)
     def lazy(self):
-        with patch('xarray_um.backend._native.decode',wraps=_native.decode) as calls:
+        with patch('xarray_um.backend._native.plane',wraps=_native.plane) as calls:
             with self.open('soil') as ds:
                 name=CASES['soil'][2];assert calls.call_count==0
                 ds[name].isel({d:0 for d in ds[name].dims}).to_numpy()

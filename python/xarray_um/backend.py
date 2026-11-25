@@ -49,7 +49,7 @@ def metadata(definitions, code, proc):
     if proc:
         prefix = {64:'mean_',128:'sum_' if int(base.get('accum_field','0')) else 'mean_',4096:'min_',8192:'max_'}.get(proc)
         if prefix is None: raise ValueError(f'Unsupported processing code {proc} for {code}')
-        base['varname'] = prefix+base['varname']
+        base['varname'] = base['varname'] if base['varname'].startswith(prefix) else prefix+base['varname']
     return base
 
 
@@ -88,10 +88,19 @@ def geographic(x, y, pole_latitude, pole_longitude, component):
 
 
 class FieldArray(BackendArray):
-    def __init__(self,path,cat,records,shape,scale,grid_type,grid):
+    def __init__(self,path,cat,records,shape,scale,grid_type,grid,reader):
         self.path=path; self.cat=cat; self.records=records; self.shape=shape
-        self.scale=scale; self.grid_type=grid_type; self.grid=grid
+        self.scale=scale; self.grid_type=grid_type; self.grid=grid; self.reader=reader
         self.dtype=np.dtype('float64' if cat['word_size']==8 and any(r['i'][20]==0 for r in records.values()) else 'float32')
+    def __getstate__(self):
+        # File handles are process-local. Dask process schedulers serialise the
+        # lazy array, then reopen a positioned handle in the receiving process.
+        state=dict(self.__dict__)
+        state.pop('reader')
+        return state
+    def __setstate__(self,state):
+        self.__dict__.update(state)
+        self.reader=_native.Reader(self.path)
     def __getitem__(self,key):
         return indexing.explicit_indexing_adapter(key,self.shape,indexing.IndexingSupport.BASIC,self._read)
     def _read(self,key):
@@ -104,18 +113,14 @@ class FieldArray(BackendArray):
             index=tuple(int(indices[a][where[a]]) for a in range(leading))
             record=self.records[index];i,r=record['i'],record['r'];w=self.cat['word_size']
             length=(i[29] if i[29]>0 else i[14])*w
-            decoded=_native.decode(self.path,i[28]*w,length,i[18],i[17],i[20],w,self.cat['big_endian'],r[17],i[38])
-            if self.grid=='thermodynamic' and self.grid_type in (11,18,19):
-                decoded=_native.interpolate(decoded,i[18],i[17],self.shape[-2],self.grid_type,self.scale)
-                data=np.frombuffer(decoded,dtype='<f8').astype(self.dtype).reshape(self.shape[-2:])
-            else:
-                data=np.frombuffer(decoded,dtype='<f8').astype(self.dtype).reshape(i[17],i[18])
-                data=data*self.dtype.type(self.scale)
-                if data.shape!=self.shape[-2:]:raise ValueError('Unstaggered source and target grid extents differ')
+            data=_native.plane(self.reader,i[28]*w,length,i[18],i[17],i[20],w,
+                               self.cat['big_endian'],r[17],i[38],
+                               self.grid_type if self.grid=='thermodynamic' else 0,
+                               self.shape[-2],self.scale,self.dtype==np.dtype('float64')).reshape(self.shape[-2:])
             chunks.append(data[key[-2:]])
         spatial=np.empty(self.shape[-2:],dtype=[])[key[-2:]].shape
         if not chunks: return np.empty(tuple(len(v) for a,v in enumerate(indices) if not np.isscalar(selections[a]))+spatial,dtype=self.dtype)
-        result=np.stack(chunks).reshape(*(len(v) for v in indices),*spatial)
+        result=(chunks[0] if len(chunks)==1 else np.stack(chunks)).reshape(*(len(v) for v in indices),*spatial)
         for axis in reversed(range(leading)):
             if np.isscalar(selections[axis]): result=np.take(result,0,axis=axis)
         return result
@@ -137,6 +142,7 @@ class UMBackend(BackendEntrypoint):
             i=rec['i'];groups[(i[41],i[24])].append(rec)
         requested=set(variables or []);wanted_codes=set(map(int,stash_codes or []));dropped=set(drop_variables or [])
         coords={};data={};registry={};used_domains=set();found_codes=set()
+        reader=_native.Reader(path)
         def coordinate(base,values,attrs,identity=None):
             values=np.asarray(values)
             signature=(base,values.dtype.str,values.tobytes(),json.dumps({k:v for k,v in attrs.items() if k!='long_name'},sort_keys=True),identity)
@@ -153,6 +159,8 @@ class UMBackend(BackendEntrypoint):
             meta=metadata(definitions,code,proc);name=meta['varname']
             if (requested and name not in requested) or (wanted_codes and code not in wanted_codes) or name in dropped:continue
             found_codes.add(code)
+            if name in data:
+                raise ValueError('Variable name collision across STASH/processing groups: '+name)
             i,r=records[0]['i'],records[0]['r']
             if i[15] not in (1,101):raise ValueError(f'{name}: unsupported grid code {i[15]}')
             times=sorted({valid_time(v) for v in records})
@@ -255,8 +263,9 @@ class UMBackend(BackendEntrypoint):
             attrs={k:meta[v] for k,v in [('long_name','longname'),('standard_name','standardname'),('units','units')] if meta.get(v)}
             attrs.update(stash_model=i[44],stash_section=code//1000,stash_item=code%1000,um_lbproc=proc)
             if proc in (64,128,4096,8192):attrs['cell_methods']='time: '+({64:'mean',128:'sum' if int(meta.get('accum_field','0')) else 'mean',4096:'minimum',8192:'maximum'}[proc])
-            array=FieldArray(path,cat,look,tuple(shape),float(meta.get('scalefact','1')),gridtype,grid)
+            array=FieldArray(path,cat,look,tuple(shape),float(meta.get('scalefact','1')),gridtype,grid,reader)
             data[name]=xr.Variable(tuple(dims),indexing.LazilyIndexedArray(array),attrs)
+            data[name].encoding['source_missing_value']=float(r[17])
             data[name].encoding['preferred_chunks']={d:(n if d in (y,x) else 1) for d,n in zip(dims,shape)}
         if requested-set(data)-dropped:raise ValueError(f'Variables not found: {requested-set(data)-dropped}')
         if wanted_codes-found_codes:raise ValueError(f'STASH codes not found: {wanted_codes-found_codes}')
@@ -267,7 +276,7 @@ class UMBackend(BackendEntrypoint):
         grids={}
         pole_lat,pole_lon=cat['real_constants'][4:6]
         coords['rotated_pole']=xr.Variable((),0,{'grid_mapping_name':'rotated_latitude_longitude',
-            'grid_north_pole_latitude':pole_lat,'grid_north_pole_longitude':pole_lon})
+            'grid_north_pole_latitude':pole_lat,'grid_north_pole_longitude':pole_lon,'north_pole_grid_longitude':0.})
         for name,variable in data.items():
             y,x=variable.dims[-2:]
             if (y,x) not in grids:
@@ -284,5 +293,5 @@ class UMBackend(BackendEntrypoint):
         if not decode_times:
             for k in list(dataset.coords):
                 if dataset[k].dtype.kind=='M':dataset[k]=xr.Variable(dataset[k].dims,dataset[k].values.astype('datetime64[s]').astype('int64'),{'units':'seconds since 1970-01-01','calendar':'proleptic_gregorian'})
-        dataset.set_close(lambda:None)
+        dataset.set_close(reader.close)
         return dataset

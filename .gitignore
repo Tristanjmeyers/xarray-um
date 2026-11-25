@@ -17,3 +17,9 @@ __pycache__/
 !/scripts/check_artifacts.py
 !/scripts/check_wheel.py
 /notebooks/
+
+# Portable validation and benchmark tools
+!/scripts/compare_converters.py
+!/scripts/comparison_notebook.py
+!/scripts/benchmark_scaling.py
+!/scripts/publish_results.py

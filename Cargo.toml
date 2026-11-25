@@ -1,6 +1,6 @@
 [package]
 name = "xarray-um"
-version = "0.1.0"
+version = "0.2.0"
 description = "Rust decoding backend for xarray-um"
 repository = "https://github.com/Tristanjmeyers/xarray-um"
 edition = "2021"
@@ -11,3 +11,4 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 pyo3 = { version = "0.23", features = ["extension-module"] }
 serde_json = "1"
+numpy = "0.23"

@@ -1,0 +1,136 @@
+stream,field,candidate_field,status,finite_pairs,max_abs,rmse,bias,outside_tolerance,nan_mask_mismatches,positive_inf_mismatches,negative_inf_mismatches,units
+mlev,total_radar_reflectivity_3d,total_radar_reflectivity_3d,exact,1360800000,0.0,0.0,0.0,0,0,0,0,dBZ
+mlev,turb_kinetic_energy,turb_kinetic_energy,exact,1341360000,0.0,0.0,0.0,0,0,0,0,m2 s-2
+mlev,geometric_w,geometric_w,exact,136080000,0.0,0.0,0.0,0,0,0,0,m s-1
+mlev,geometric_u,geometric_u,exact,136080000,0.0,0.0,0.0,0,0,0,0,m s-1
+mlev,geometric_v,geometric_v,exact,136080000,0.0,0.0,0.0,0,0,0,0,m s-1
+mlev,theta_lev_temp,theta_lev_temp,exact,1360800000,0.0,0.0,0.0,0,0,0,0,K
+mlev,geoph_rlev,geoph_rlev,exact,1360800000,0.0,0.0,0.0,0,0,0,0,m
+mlev,omega_theta,omega_theta,exact,1360800000,0.0,0.0,0.0,0,0,0,0,Pa s-1
+mlev,model_u,model_u,exact,1360800000,0.0,0.0,0.0,0,0,0,0,m s-1
+mlev,model_v,model_v,exact,1360800000,0.0,0.0,0.0,0,0,0,0,m s-1
+mlev,model_pot_temp,model_pot_temp,exact,1360800000,0.0,0.0,0.0,0,0,0,0,K
+mlev,model_spec_hum,model_spec_hum,exact,1360800000,0.0,0.0,0.0,0,0,0,0,1
+mlev,model_qcf,model_qcf,exact,1360800000,0.0,0.0,0.0,0,0,0,0,1
+mlev,model_w,model_w,exact,1360800000,0.0,0.0,0.0,0,0,0,0,m s-1
+mlev,model_qcl,model_qcl,exact,1360800000,0.0,0.0,0.0,0,0,0,0,1
+mlev,cloud_area_fraction,cloud_area_fraction,exact,1360800000,0.0,0.0,0.0,0,0,0,0,1
+mlev,liquid_cloud_fraction,liquid_cloud_fraction,exact,1360800000,0.0,0.0,0.0,0,0,0,0,1
+mlev,frozen_cloud_fraction,frozen_cloud_fraction,exact,1360800000,0.0,0.0,0.0,0,0,0,0,1
+mlev,rain_after_timestep,rain_after_timestep,exact,1360800000,0.0,0.0,0.0,0,0,0,0,kg m-2
+mlev,air_press,air_press,exact,1360800000,0.0,0.0,0.0,0,0,0,0,Pa
+mlev,model_press,model_press,exact,1360800000,0.0,0.0,0.0,0,0,0,0,Pa
+sfc,sfc_net_dn_sw_flux,sfc_net_dn_sw_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,mean_sfc_net_dn_sw_flux,mean_sfc_net_dn_sw_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,toa_out_sw_flux,toa_out_sw_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,mean_toa_out_sw_flux,mean_toa_out_sw_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,toa_in_sw_flux,toa_in_sw_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,mean_toa_in_sw_flux,mean_toa_in_sw_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,sfc_direct_sw_flux,sfc_direct_sw_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,mean_sfc_direct_sw_flux,mean_sfc_direct_sw_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,sfc_diffuse_sw_flux,sfc_diffuse_sw_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,mean_sfc_diffuse_sw_flux,mean_sfc_diffuse_sw_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,mean_sfc_dw_sw_flux,mean_sfc_dw_sw_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,mean_sfc_net_downward_lw_flux,mean_sfc_net_downward_lw_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,mean_toa_out_lw_flux,mean_toa_out_lw_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,mean_sfc_dw_lw_flux,mean_sfc_dw_lw_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,radar_reflectivity_1km,radar_reflectivity_1km,exact,19440000,0.0,0.0,0.0,0,0,0,0,dBZ
+sfc,sum_rain_amount,sum_rain_amount,exact,19440000,0.0,0.0,0.0,0,0,0,0,kg m-2
+sfc,sum_snowfall_amount,sum_snowfall_amount,exact,19440000,0.0,0.0,0.0,0,0,0,0,kg m-2
+sfc,rain_rate,rain_rate,exact,19440000,0.0,0.0,0.0,0,0,0,0,kg m-2 s-1
+sfc,max_rain_rate,max_rain_rate,exact,19440000,0.0,0.0,0.0,0,0,0,0,kg m-2 s-1
+sfc,snowfall_rate,snowfall_rate,exact,19440000,0.0,0.0,0.0,0,0,0,0,kg m-2 s-1
+sfc,max_snowfall_rate,max_snowfall_rate,exact,19440000,0.0,0.0,0.0,0,0,0,0,kg m-2 s-1
+sfc,storm_locn,storm_locn,exact,19440000,0.0,0.0,0.0,0,0,0,0,
+sfc,num_flashes,sum_num_flashes,exact,19440000,0.0,0.0,0.0,0,0,0,0,
+sfc,resist_to_evap,resist_to_evap,exact,12887100,0.0,0.0,0.0,0,0,0,0,1
+sfc,coeff_ratio_temp_tiles,coeff_ratio_temp_tiles,exact,12887100,0.0,0.0,0.0,0,0,0,0,1
+sfc,aerodynamic_resistance,aerodynamic_resistance,exact,1431900,0.0,0.0,0.0,0,0,0,0,s m-1
+sfc,sfc_zonal_wind,sfc_zonal_wind,exact,19440000,0.0,0.0,0.0,0,0,0,0,m s-1
+sfc,sfc_merid_wind,sfc_merid_wind,exact,19440000,0.0,0.0,0.0,0,0,0,0,m s-1
+sfc,sfc_sens_heat_flux,sfc_sens_heat_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,mean_sfc_sens_heat_flux,mean_sfc_sens_heat_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,sfc_dnw_wf,sfc_dnw_wf,exact,19440000,0.0,0.0,0.0,0,0,0,0,kg m-2 s-1
+sfc,mean_sfc_dnw_wf,mean_sfc_dnw_wf,exact,19440000,0.0,0.0,0.0,0,0,0,0,kg m-2 s-1
+sfc,water_evap,sum_water_evap,exact,1431900,0.0,0.0,0.0,0,0,0,0,kg m-2
+sfc,mean_evap_from_open_sea,mean_evap_from_open_sea,exact,19440000,0.0,0.0,0.0,0,0,0,0,kg m-2 s-1
+sfc,sfc_latent_heat_flux_up,sfc_latent_heat_flux_up,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,mean_sfc_latent_heat_flux_up,mean_sfc_latent_heat_flux_up,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,sfc_temp,sfc_temp,exact,19440000,0.0,0.0,0.0,0,0,0,0,K
+sfc,max_sfc_temp,max_sfc_temp,exact,19440000,0.0,0.0,0.0,0,0,0,0,K
+sfc,mean_sfc_temp,mean_sfc_temp,exact,19440000,0.0,0.0,0.0,0,0,0,0,K
+sfc,min_sfc_temp,min_sfc_temp,exact,19440000,0.0,0.0,0.0,0,0,0,0,K
+sfc,sfc_spec_hum,sfc_spec_hum,exact,19440000,0.0,0.0,0.0,0,0,0,0,1
+sfc,mean_sfc_spec_hum,mean_sfc_spec_hum,exact,19440000,0.0,0.0,0.0,0,0,0,0,1
+sfc,deep_soil_temp,deep_soil_temp,exact,5727600,0.0,0.0,0.0,0,0,0,0,K
+sfc,sfc_rh,sfc_rh,exact,19440000,0.0,0.0,0.0,0,0,0,0,1
+sfc,mean_sfc_rh,mean_sfc_rh,exact,19440000,0.0,0.0,0.0,0,0,0,0,1
+sfc,sfc_visibility,sfc_visibility,exact,19440000,0.0,0.0,0.0,0,0,0,0,m
+sfc,sfc_fog,sfc_fog,exact,19440000,0.0,0.0,0.0,0,0,0,0,1
+sfc,dew_point,dew_point,exact,19440000,0.0,0.0,0.0,0,0,0,0,K
+sfc,sfc_vis_lt5,sfc_vis_lt5,exact,19440000,0.0,0.0,0.0,0,0,0,0,1
+sfc,sfc_visibility_incl_precip,sfc_visibility_incl_precip,exact,19440000,0.0,0.0,0.0,0,0,0,0,m
+sfc,sfc_vis_lt_1km,sfc_vis_lt_1km,exact,19440000,0.0,0.0,0.0,0,0,0,0,1
+sfc,sfc_vis_lt5_incl_precip,sfc_vis_lt5_incl_precip,exact,19440000,0.0,0.0,0.0,0,0,0,0,1
+sfc,sfc_vis_ls_pptn,sfc_vis_ls_pptn,exact,19440000,0.0,0.0,0.0,0,0,0,0,m
+sfc,sfc_vis_conv_pptn,sfc_vis_conv_pptn,exact,19440000,0.0,0.0,0.0,0,0,0,0,m
+sfc,turbulent_mixing_height,turbulent_mixing_height,exact,19440000,0.0,0.0,0.0,0,0,0,0,m
+sfc,sfc_pot_evap,sfc_pot_evap,exact,7159500,0.0,0.0,0.0,0,0,0,0,kg m-2 s-1
+sfc,sfc_wind_gust,sfc_wind_gust,exact,19440000,0.0,0.0,0.0,0,0,0,0,m s-1
+sfc,max_sfc_wind_gust,max_sfc_wind_gust,exact,19440000,0.0,0.0,0.0,0,0,0,0,m s-1
+sfc,friction_velocity,friction_velocity,exact,19440000,0.0,0.0,0.0,0,0,0,0,m s-1
+sfc,bl_type,bl_type,exact,19440000,0.0,0.0,0.0,0,0,0,0,
+sfc,scale_aware_sfc_wind_gust,scale_aware_sfc_wind_gust,exact,19440000,0.0,0.0,0.0,0,0,0,0,m s-1
+sfc,max_scale_aware_sfc_wind_gust,max_scale_aware_sfc_wind_gust,exact,19440000,0.0,0.0,0.0,0,0,0,0,m s-1
+sfc,sum_sfc_runoff,sum_sfc_runoff,exact,1431900,0.0,0.0,0.0,0,0,0,0,kg m-2
+sfc,sfc_soil_moisture,sfc_soil_moisture,exact,1431900,0.0,0.0,0.0,0,0,0,0,kg m-2
+sfc,canopy_water,canopy_water,exact,1431900,0.0,0.0,0.0,0,0,0,0,kg m-2
+sfc,soil_moisture,soil_moisture,exact,5727600,0.0,0.0,0.0,0,0,0,0,kg m-2
+sfc,sfc_snow_melt,sfc_snow_melt,exact,1431900,0.0,0.0,0.0,0,0,0,0,kg m-2 s-1
+sfc,sfc_runoff,sfc_runoff,exact,1398084,0.0,0.0,0.0,0,0,0,0,kg m-2 s-1
+sfc,very_low_cloud,very_low_cloud,exact,19440000,0.0,0.0,0.0,0,0,0,0,1
+sfc,low_cloud,low_cloud,exact,19440000,0.0,0.0,0.0,0,0,0,0,1
+sfc,mid_cloud,mid_cloud,exact,19440000,0.0,0.0,0.0,0,0,0,0,1
+sfc,high_cloud,high_cloud,exact,19440000,0.0,0.0,0.0,0,0,0,0,1
+sfc,cloud_base_hgt_0p1_octa,cloud_base_hgt_0p1_octa,exact,14795093,0.0,0.0,0.0,0,0,0,0,m
+sfc,cloud_base_hgt_1p5_octa,cloud_base_hgt_1p5_octa,exact,11945415,0.0,0.0,0.0,0,0,0,0,m
+sfc,cloud_base_hgt_2p5_octa,cloud_base_hgt_2p5_octa,exact,11172819,0.0,0.0,0.0,0,0,0,0,m
+sfc,cloud_base_hgt_3p5_octa,cloud_base_hgt_3p5_octa,exact,10613816,0.0,0.0,0.0,0,0,0,0,m
+sfc,cloud_base_hgt_4p5_octa,cloud_base_hgt_4p5_octa,exact,10150450,0.0,0.0,0.0,0,0,0,0,m
+sfc,cloud_base_hgt_5p5_octa,cloud_base_hgt_5p5_octa,exact,9581328,0.0,0.0,0.0,0,0,0,0,m
+sfc,cloud_base_hgt_6p5_octa,cloud_base_hgt_6p5_octa,exact,8770575,0.0,0.0,0.0,0,0,0,0,m
+sfc,cloud_base_hgt_7p9_octa,cloud_base_hgt_7p9_octa,exact,5682485,0.0,0.0,0.0,0,0,0,0,m
+sfc,total_cloud_max_rnd_ovrlap,total_cloud_max_rnd_ovrlap,exact,19440000,0.0,0.0,0.0,0,0,0,0,1
+sfc,cloud_lt_1000ft,cloud_lt_1000ft,exact,18651708,0.0,0.0,0.0,0,0,0,0,1
+sfc,low_cloud_base,low_cloud_base,exact,16884090,0.0,0.0,0.0,0,0,0,0,m
+sfc,low_cloud_top,low_cloud_top,exact,16884090,0.0,0.0,0.0,0,0,0,0,m
+sfc,total_cldtop_hgt,total_cldtop_hgt,within_tolerance,16655791,0.0009765625,0.0004526477928365953,0.00024423247653798365,0,0,0,0,m
+sfc,mslp,mslp,exact,19440000,0.0,0.0,0.0,0,0,0,0,Pa
+sfc,mean_mslp,mean_mslp,exact,19440000,0.0,0.0,0.0,0,0,0,0,Pa
+sfc,total_col_qcl,total_col_qcl,exact,19440000,0.0,0.0,0.0,0,0,0,0,kg m-2
+sfc,total_col_qcf,total_col_qcf,exact,19440000,0.0,0.0,0.0,0,0,0,0,kg m-2
+sfc,eastward_water_vapor_flux,eastward_water_vapor_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,kg m-2 s-1
+sfc,northward_water_vapor_flux,northward_water_vapor_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,kg m-2 s-1
+sfc,turb_predictor,turb_predictor,exact,19440000,0.0,0.0,0.0,0,0,0,0,1
+sfc,sfc_snow_amount,sfc_snow_amount,exact,19440000,0.0,0.0,0.0,0,0,0,0,kg m-2
+sfc,skin_temp,skin_temp,exact,19440000,0.0,0.0,0.0,0,0,0,0,K
+sfc,blayer_depth,blayer_depth,exact,19440000,0.0,0.0,0.0,0,0,0,0,m
+sfc,sfc_ruff_l,sfc_ruff_l,exact,19440000,0.0,0.0,0.0,0,0,0,0,m
+sfc,sea_ice_fraction,sea_ice_fraction,exact,18008100,0.0,0.0,0.0,0,0,0,0,1
+sfc,sfc_air_press,sfc_air_press,exact,19440000,0.0,0.0,0.0,0,0,0,0,Pa
+sfc,sfc_dw_sw_flux,sfc_dw_sw_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,sfc_net_downward_lw_flux,sfc_net_downward_lw_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,toa_out_lw_flux,toa_out_lw_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,sfc_dw_lw_flux,sfc_dw_lw_flux,exact,19440000,0.0,0.0,0.0,0,0,0,0,W m-2
+sfc,large_scale_ice_water_path,large_scale_ice_water_path,exact,19440000,0.0,0.0,0.0,0,0,0,0,kg m-2
+sfc,convective_ice_water_path,convective_ice_water_path,exact,19440000,0.0,0.0,0.0,0,0,0,0,kg m-2
+plev,epv,epv,exact,408240000,0.0,0.0,0.0,0,0,0,0,K m2 kg-1 s-1
+plev,std_lev_w,std_lev_w,exact,408240000,0.0,0.0,0.0,0,0,0,0,m s-1
+plev,std_lev_u_notB,std_lev_u_notB,exact,408240000,0.0,0.0,0.0,0,0,0,0,m s-1
+plev,std_lev_v_notB,std_lev_v_notB,exact,408240000,0.0,0.0,0.0,0,0,0,0,m s-1
+plev,std_lev_geoph,std_lev_geoph,exact,408240000,0.0,0.0,0.0,0,0,0,0,m
+plev,std_lev_temp,std_lev_temp,exact,408240000,0.0,0.0,0.0,0,0,0,0,K
+plev,std_lev_rh_wrt_ice,std_lev_rh_wrt_ice,exact,408240000,0.0,0.0,0.0,0,0,0,0,1
+plev,std_lev_rh,std_lev_rh,exact,408240000,0.0,0.0,0.0,0,0,0,0,1
+plev,std_lev_spec_hum,std_lev_spec_hum,exact,408240000,0.0,0.0,0.0,0,0,0,0,1
+plev,rh_plev,rh_plev,exact,408240000,0.0,0.0,0.0,0,0,0,0,1

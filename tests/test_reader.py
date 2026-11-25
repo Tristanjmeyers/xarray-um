@@ -22,7 +22,7 @@ def fixture_file(tmp_path,word=8,endian='>'):
 @pytest.mark.parametrize('word,endian',[(8,'>'),(8,'<'),(4,'>'),(4,'<')])
 def test_decode_lazy(tmp_path,word,endian):
     p=fixture_file(tmp_path,word,endian)
-    with patch('xarray_um.backend._native.decode',wraps=_native.decode) as decode:
+    with patch('xarray_um.backend._native.plane',wraps=_native.plane) as decode:
         ds=UMBackend().open_dataset(p,variables=['sfc_soil_moisture'])
         assert decode.call_count==0
         np.testing.assert_array_equal(ds.sfc_soil_moisture.isel(time0=0,rlat=1).values,[4,5,6])
@@ -161,3 +161,135 @@ def test_model_level_mapping_not_deduplicated_by_height_only(tmp_path):
     assert za=='hybridr2' and zb=='hybridr2_1'
     np.testing.assert_array_equal(ds[za+'_model_level'],[.5,1.5])
     np.testing.assert_array_equal(ds[zb+'_model_level'],[1.5,2.5])
+
+
+def test_no_duplicate_aggregation_prefix():
+    assert metadata({(4201,None):{'varname':'sum_rain_amount','accum_field':'1'}},4201,128)['varname']=='sum_rain_amount'
+
+
+def test_reader_close_and_plane_ownership(tmp_path):
+    path=fixture_file(tmp_path)
+    with UMBackend().open_dataset(path,variables=['sfc_soil_moisture']) as ds:
+        a=ds.sfc_soil_moisture.isel(time0=0).to_numpy()
+        assert a.flags.c_contiguous
+    np.testing.assert_array_equal(a,[[1,2,3],[4,5,6]])
+    reader=_native.Reader(str(path));reader.close()
+    with pytest.raises(ValueError,match='closed'):
+        _native.plane(reader,390*8,48,3,2,0,8,True,-1e30,1,0,2,1.,True)
+
+
+def test_single_export_thread_equivalence(tmp_path):
+    from xarray_um.cli import write_single
+    path=fixture_file(tmp_path)
+    a,b=tmp_path/'one.nc',tmp_path/'two.nc'
+    write_single(path,a,workers=1);write_single(path,b,workers=2)
+    with xr.open_dataset(a) as left,xr.open_dataset(b) as right:
+        xr.testing.assert_identical(left,right)
+        np.testing.assert_array_equal(left.sfc_soil_moisture,[[[1,2,3],[4,5,6]]])
+        assert left.sfc_soil_moisture.encoding['chunksizes']==(1,2,3)
+    with pytest.raises(FileExistsError):write_single(path,a)
+    with pytest.raises(ValueError):write_single(path,path)
+
+
+def test_stash_export_source_stem_and_manifest(tmp_path):
+    from xarray_um.cli import write_stash
+    path=fixture_file(tmp_path)
+    destination=tmp_path/'groups'
+    write_stash(path,destination,workers=2)
+    report=json.loads((destination/'manifest.json').read_text())
+    assert report['complete']
+    assert report['files'][0]['file']=='test_8208.nc'
+    with xr.open_dataset(destination/'test_8208.nc') as ds:
+        np.testing.assert_array_equal(ds.sfc_soil_moisture,[[[1,2,3],[4,5,6]]])
+    with pytest.raises(FileExistsError):write_stash(path,destination)
+
+
+def test_export_failure_not_published(tmp_path):
+    from xarray_um.cli import write_single,write_stash
+    path=fixture_file(tmp_path)
+    with patch('xarray_um.cli._read_plane',side_effect=ValueError('broken plane')):
+        with pytest.raises(ValueError,match='broken'):
+            write_single(path,tmp_path/'bad.nc',workers=2)
+        assert not (tmp_path/'bad.nc').exists()
+        assert not list(tmp_path.glob('*.writing'))
+        with pytest.raises(ValueError,match='broken'):
+            write_stash(path,tmp_path/'failed',workers=1)
+    assert not (tmp_path/'failed'/'manifest.json').exists()
+    assert (tmp_path/'failed'/'failure.json').exists()
+
+
+@pytest.mark.parametrize('width',[1,3,7,12,24,31])
+def test_wgdos_crossing_bits(tmp_path,width):
+    integers=[0,1,(1<<width)-1,1,0,1,(1<<width)-1]
+    packed=''.join(f'{v:0{width}b}' for v in integers)
+    packed += '0' * (-len(packed)%32)
+    row=int(packed,2).to_bytes(len(packed)//8,'big')
+    header=struct.pack('>IiHH',5+len(row)//4,0,len(integers),1)
+    content=header+struct.pack('>IHH',0x41100000,width,len(row)//4)+row
+    path=tmp_path/'packed.bin';path.write_bytes(content)
+    result=np.frombuffer(_native.decode(str(path),0,len(content),7,1,1,8,True,-1e30,1),dtype='float64')
+    expected=np.array(integers,dtype='float32')+np.float32(1.)
+    np.testing.assert_array_equal(result,expected.astype('float64'))
+
+
+
+def test_float32_export_missing_collision(tmp_path):
+    from xarray_um.cli import write_single
+    path=fixture_file(tmp_path)
+    indicator=-1073741824.
+    with path.open('r+b') as f:
+        f.seek((319+45+17)*8);f.write(struct.pack('>d',indicator))
+        f.seek(390*8);f.write(struct.pack('>d',indicator-2**-20))
+    with xr.open_dataset(path,engine='um') as ds:
+        assert ds.sfc_soil_moisture[0,0,0].item()==indicator-2**-20
+    output=tmp_path/'single.nc';write_single(path,output,workers=2)
+    with xr.open_dataset(output) as ds:
+        assert np.isnan(ds.sfc_soil_moisture[0,0,0].item())
+        assert ds.sfc_soil_moisture.encoding['_FillValue']==np.float32(indicator)
+
+
+
+def test_wgdos_missing_bitmap(tmp_path):
+    mask=bytes([128,0,0,0])
+    packed=''.join(f'{v:03b}' for v in range(1,7))
+    packed+='0'*(-len(packed)%32)
+    row=mask+int(packed,2).to_bytes(len(packed)//8,'big')
+    content=struct.pack('>IiHHIHH',5+len(row)//4,0,7,1,0x41100000,35,len(row)//4)+row
+    p=tmp_path/'mask.bin';p.write_bytes(content)
+    decoded=np.frombuffer(_native.decode(str(p),0,len(content),7,1,1,8,True,-1e30,1),dtype='float64')
+    np.testing.assert_allclose(decoded,[np.nan,2,3,4,5,6,7],equal_nan=True)
+
+
+
+def test_lazy_array_serialisation_reopens_reader(tmp_path):
+    import pickle
+    path=fixture_file(tmp_path)
+    with xr.open_dataset(path,engine='um') as ds:
+        restored=pickle.loads(pickle.dumps(ds.sfc_soil_moisture.variable._data))
+        np.testing.assert_array_equal(np.asarray(restored),[[[1,2,3],[4,5,6]]])
+
+
+
+def test_truncated_wgdos_bitstream(tmp_path):
+    content=struct.pack('>IiHHIHH',5,0,7,1,0x41100000,3,0)
+    path=tmp_path/'bits.bin';path.write_bytes(content)
+    with pytest.raises(ValueError,match='truncated WGDOS bits'):
+        _native.decode(str(path),0,len(content),7,1,1,8,True,-1e30,1)
+
+
+def test_positioned_reader_detects_truncation(tmp_path):
+    path=fixture_file(tmp_path);reader=_native.Reader(str(path))
+    path.write_bytes(b'short')
+    with pytest.raises(ValueError):
+        _native.plane(reader,390*8,48,3,2,0,8,True,-1e30,1,0,2,1.,True)
+    reader.close()
+
+
+
+def test_ambiguous_variable_names_are_rejected(tmp_path):
+    path=fixture_file(tmp_path);cat=json.loads(_native.catalogue(str(path)))
+    other=json.loads(json.dumps(cat['records'][0]));other['i'][41]=8209
+    cat['records'].append(other)
+    with patch('xarray_um.backend._native.catalogue',return_value=json.dumps(cat)),patch('xarray_um.backend.metadata',return_value={'varname':'same','umgrid':'1'}):
+        with pytest.raises(ValueError,match='Variable name collision'):
+            UMBackend().open_dataset(path)

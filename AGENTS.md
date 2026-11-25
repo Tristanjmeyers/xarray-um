@@ -78,8 +78,9 @@ large exports and benchmarks require appropriate compute resources.
 - Opening a file and inspecting metadata must remain lazy with respect to field
   decoding. Preserve xarray indexing and horizontal-plane chunk preferences.
 - Rust releases the GIL around decoding and performs independently positioned
-  reads. Parallelism comes from scheduling independent planes with Dask; the
-  converter-compatible CLI remains serial.
+  reads. Parallelism comes from scheduling independent planes with Dask or the
+  bounded CLI decoder pool. STASH-directory export uses independent processes,
+  one thread and one NetCDF writer per process.
 - Preserve bounds checks on file offsets, lengths, dimensions and packed bit
   access. Unsupported formats and truncated data must fail clearly.
 - Keep native grids by default. Thermodynamic-grid interpolation is an explicit
@@ -133,7 +134,7 @@ Keep credentials and site-specific paths out of public documentation and CI.
 
 The wheel workflow builds Linux wheels for each supported Python version and
 checks archive contents and clean Pixi installation. A version tag such as
-`v0.1.0` publishes verified artifacts to GitHub Releases. Keep version numbers in
+`v0.2.0` publishes verified artifacts to GitHub Releases. Keep version numbers in
 Python, Cargo and Pixi metadata consistent, and never move a published tag to
 replace a release silently. Publishing tags or releases requires authorization.
 

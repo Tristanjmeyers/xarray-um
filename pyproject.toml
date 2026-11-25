@@ -3,7 +3,7 @@ requires = ["maturin>=1.8,<2"]
 build-backend = "maturin"
 [project]
 name = "xarray-um"
-version = "0.1.0"
+version = "0.2.0"
 description = "Lazy Rust-backed xarray reader for NZRA Unified Model fields files"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"
